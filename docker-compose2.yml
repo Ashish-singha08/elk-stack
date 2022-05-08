@@ -1,0 +1,18 @@
+version: "2.1"
+
+services:
+  app:
+    container_name: "myapp"
+    build: .
+    ports:
+      - "9843:9843"
+    environment:
+      - "NODE_ENV=dev"
+      - "HOST=0.0.0.0"
+      - "PORT=9843"
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://localhost:12201" # Logstash UDP input port
+        tag: "myapp"
+    restart: always
