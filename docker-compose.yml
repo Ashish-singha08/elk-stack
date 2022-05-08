@@ -8,6 +8,8 @@ services:
     volumes:
       - ./elasticsearch_data/:/usr/share/elasticsearch/data
     mem_limit: "1g"
+    networks:
+    - net
 
   redis-cache:
     image: redis:6.2
@@ -21,6 +23,8 @@ services:
       - elasticsearch
     ports:
       - 12201:12201/udp
+    networks:
+    - net
 
   logstash-central:
     image: logstash:7.11.1
@@ -29,6 +33,8 @@ services:
     command: logstash -f /etc/logstash/logstash.conf
     depends_on:
       - elasticsearch
+    networks:
+    - net
 
   kibana:
     image: kibana:7.11.1
@@ -38,3 +44,8 @@ services:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
     depends_on:
       - elasticsearch
+    networks:
+    - net 
+
+networks:
+  net:
